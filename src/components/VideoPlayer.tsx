@@ -12,9 +12,41 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
   
   // Simular diferentes vídeos baseados na imagem detectada
-  const getVideoForImage = () => {
-    return "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+  const getVideoForImage = (imageUrl: string) => {
+    // Simula análise da imagem para determinar qual vídeo mostrar
+    const imageHash = imageUrl.length % 4;
+    
+    const videoDatabase = [
+      {
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        title: "Big Buck Bunny",
+        description: "Animação 3D sobre um coelhinho corajoso",
+        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
+      },
+      {
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
+        title: "Elephants Dream",
+        description: "Jornada surreal em mundo fantástico",
+        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
+      },
+      {
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        title: "For Bigger Blazes", 
+        description: "Aventura de ação em alta velocidade",
+        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+      },
+      {
+        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        title: "Sintel",
+        description: "História épica de uma guerreira",
+        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg"
+      }
+    ];
+    
+    return videoDatabase[imageHash];
   };
+
+  const currentVideo = getVideoForImage(detectedImage);
 
   return (
     <div className="space-y-6">
@@ -32,7 +64,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
             />
             <div className="text-white/90">
               <p className="text-sm">Reproduzindo vídeo correspondente</p>
-              <p className="text-xs opacity-75">Demo - Big Buck Bunny</p>
+              <p className="text-xs opacity-75">{currentVideo.title}</p>
             </div>
           </div>
         </div>
@@ -43,8 +75,8 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
         <div className="relative aspect-video">
           <video
             className="w-full h-full object-cover"
-            src={getVideoForImage()}
-            poster="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
+            src={currentVideo.url}
+            poster={currentVideo.poster}
             controls
             autoPlay
             onPlay={() => setIsPlaying(true)}
