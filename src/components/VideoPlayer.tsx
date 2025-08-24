@@ -14,7 +14,8 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
   // Simular diferentes vídeos baseados na imagem detectada
   const getVideoForImage = (imageUrl: string) => {
     // Simula análise da imagem para determinar qual vídeo mostrar
-    const imageHash = imageUrl.length % 4;
+    // Usa timestamp + URL para gerar mais variedade
+    const imageHash = (imageUrl.length + Date.now()) % 4;
     
     const videoDatabase = [
       {
