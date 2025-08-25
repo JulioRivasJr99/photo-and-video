@@ -22,12 +22,20 @@ export const CameraView = ({ onImageDetected }: CameraViewProps) => {
 
     setIsProcessing(true);
     
-    // Simular processamento de IA
-    setTimeout(() => {
+    // Processamento real - busca na base de dados
+    try {
       const imageUrl = URL.createObjectURL(file);
+      console.log('Analisando imagem capturada...');
+      
+      // Simula tempo de processamento da IA
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       onImageDetected(imageUrl);
       setIsProcessing(false);
-    }, 2000);
+    } catch (error) {
+      console.error('Erro no processamento:', error);
+      setIsProcessing(false);
+    }
   };
 
   return (

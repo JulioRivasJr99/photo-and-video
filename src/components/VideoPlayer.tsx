@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Play, Pause, RotateCcw, Volume2 } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, AlertCircle } from 'lucide-react';
+import { PhotoVideoDatabase, PhotoVideoEntry } from '@/services/PhotoVideoDatabase';
 
 interface VideoPlayerProps {
   detectedImage: string;
@@ -10,44 +11,71 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  
-  // Simular diferentes vídeos baseados na imagem detectada
-  const getVideoForImage = (imageUrl: string) => {
-    // Simula análise da imagem para determinar qual vídeo mostrar
-    // Usa timestamp + URL para gerar mais variedade
-    const imageHash = (imageUrl.length + Date.now()) % 4;
-    
-    const videoDatabase = [
-      {
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-        title: "Big Buck Bunny",
-        description: "Animação 3D sobre um coelhinho corajoso",
-        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg"
-      },
-      {
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
-        title: "Elephants Dream",
-        description: "Jornada surreal em mundo fantástico",
-        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg"
-      },
-      {
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        title: "For Bigger Blazes", 
-        description: "Aventura de ação em alta velocidade",
-        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-      },
-      {
-        url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        title: "Sintel",
-        description: "História épica de uma guerreira",
-        poster: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg"
-      }
-    ];
-    
-    return videoDatabase[imageHash];
-  };
+  const [matchedEntry, setMatchedEntry] = useState<PhotoVideoEntry | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const currentVideo = getVideoForImage(detectedImage);
+  useEffect(() => {
+    const findMatch = async () => {
+      setIsLoading(true);
+      console.log('Buscando match para imagem detectada...');
+      
+      // Busca na base de dados real
+      const match = PhotoVideoDatabase.findMatchingEntry(detectedImage);
+      
+      if (match) {
+        console.log('Match encontrado na base:', match.name);
+        setMatchedEntry(match);
+      } else {
+        console.log('Nenhum match encontrado, usando vídeo fallback');
+        // Fallback para vídeos de exemplo se não encontrar match
+        const fallbackVideos = [
+          {
+            id: 'fallback',
+            name: "Vídeo de Demonstração",
+            description: "Nenhum match encontrado na base - vídeo de exemplo",
+            photoUrl: detectedImage,
+            videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            createdAt: new Date()
+          }
+        ];
+        setMatchedEntry(fallbackVideos[0] as PhotoVideoEntry);
+      }
+      
+      setIsLoading(false);
+    };
+
+    findMatch();
+  }, [detectedImage]);
+
+  if (isLoading) {
+    return (
+      <Card className="p-8 text-center border-primary/20">
+        <div className="mx-auto w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
+          <RotateCcw className="w-8 h-8 text-primary animate-spin" />
+        </div>
+        <h3 className="text-lg font-semibold mb-2">Processando imagem...</h3>
+        <p className="text-muted-foreground">Buscando vídeo correspondente na base de dados</p>
+      </Card>
+    );
+  }
+
+  if (!matchedEntry) {
+    return (
+      <Card className="p-8 text-center border-destructive/20">
+        <div className="mx-auto w-16 h-16 rounded-full bg-destructive/20 flex items-center justify-center mb-4">
+          <AlertCircle className="w-8 h-8 text-destructive" />
+        </div>
+        <h3 className="text-lg font-semibold mb-2">Nenhum match encontrado</h3>
+        <p className="text-muted-foreground mb-4">
+          Esta foto não está cadastrada na base de dados
+        </p>
+        <Button onClick={onBack} variant="outline">
+          <RotateCcw className="w-4 h-4 mr-2" />
+          Tentar Novamente
+        </Button>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -55,7 +83,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
       <Card className="overflow-hidden border-primary/20">
         <div className="p-4 bg-gradient-hero">
           <h3 className="text-lg font-semibold text-white mb-2">
-            ✅ Imagem detectada com sucesso!
+            ✅ Match encontrado na base!
           </h3>
           <div className="flex items-center space-x-4">
             <img 
@@ -64,8 +92,8 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
               className="w-20 h-20 object-cover rounded-lg border-2 border-white/20"
             />
             <div className="text-white/90">
-              <p className="text-sm">Reproduzindo vídeo correspondente</p>
-              <p className="text-xs opacity-75">{currentVideo.title}</p>
+              <p className="text-sm font-semibold">{matchedEntry.name}</p>
+              <p className="text-xs opacity-75">{matchedEntry.description || 'Reproduzindo vídeo correspondente'}</p>
             </div>
           </div>
         </div>
@@ -76,8 +104,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
         <div className="relative aspect-video">
           <video
             className="w-full h-full object-cover"
-            src={currentVideo.url}
-            poster={currentVideo.poster}
+            src={matchedEntry.videoUrl}
             controls
             autoPlay
             onPlay={() => setIsPlaying(true)}

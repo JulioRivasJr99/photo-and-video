@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { CameraView } from '@/components/CameraView';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { Card } from '@/components/ui/card';
-import { Smartphone, Zap, Eye, PlayCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Smartphone, Zap, Eye, PlayCircle, Settings } from 'lucide-react';
 
 const Index = () => {
   const [detectedImage, setDetectedImage] = useState<string | null>(null);
@@ -32,9 +33,20 @@ const Index = () => {
                 <p className="text-xs text-muted-foreground">Foto + Vídeo = Magia</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-medium">MVP Demo</p>
-              <p className="text-xs text-muted-foreground">v1.0.0</p>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => window.open('/admin', '_blank')}
+                variant="outline"
+                size="sm"
+                className="border-primary/30 hover:bg-primary/10"
+              >
+                <Settings className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+              <div className="text-right">
+                <p className="text-sm font-medium">Sistema Predefinido</p>
+                <p className="text-xs text-muted-foreground">v1.0.0</p>
+              </div>
             </div>
           </div>
         </div>
