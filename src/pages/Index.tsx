@@ -68,7 +68,7 @@ const Index = () => {
             </div>
 
             {/* Camera Component */}
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto px-4">
               <CameraView onImageDetected={handleImageDetected} />
             </div>
 
@@ -106,7 +106,7 @@ const Index = () => {
             </div>
           </div>
         ) : (
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto px-4">
             <VideoPlayer detectedImage={detectedImage} onBack={handleBack} />
           </div>
         )}

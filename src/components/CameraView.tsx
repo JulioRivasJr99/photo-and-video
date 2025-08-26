@@ -40,7 +40,7 @@ export const CameraView = ({ onImageDetected }: CameraViewProps) => {
 
   return (
     <Card className="relative overflow-hidden bg-gradient-hero border-primary/20 shadow-glow">
-      <div className="aspect-square bg-gradient-bg flex items-center justify-center min-h-[400px] relative">
+      <div className="aspect-square bg-gradient-bg flex items-center justify-center min-h-[350px] md:min-h-[400px] relative">
         {!isCapturing && !isProcessing ? (
           <div className="text-center space-y-6">
             <div className="mx-auto w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center">
