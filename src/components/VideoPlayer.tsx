@@ -109,6 +109,11 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
             autoPlay
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
+            onLoadedData={(e) => {
+              const video = e.currentTarget;
+              video.volume = 0.1;
+              video.play().catch(console.error);
+            }}
           />
           
           {/* Overlay de controles customizado */}
