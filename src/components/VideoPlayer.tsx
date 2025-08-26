@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -49,7 +50,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
 
   if (isLoading) {
     return (
-      <Card className="p-8 text-center border-primary/20">
+      <Card className="p-6 md:p-8 text-center border-primary/20">
         <div className="mx-auto w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-4">
           <RotateCcw className="w-8 h-8 text-primary animate-spin" />
         </div>
@@ -61,7 +62,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
 
   if (!matchedEntry) {
     return (
-      <Card className="p-8 text-center border-destructive/20">
+      <Card className="p-6 md:p-8 text-center border-destructive/20">
         <div className="mx-auto w-16 h-16 rounded-full bg-destructive/20 flex items-center justify-center mb-4">
           <AlertCircle className="w-8 h-8 text-destructive" />
         </div>
@@ -78,7 +79,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       {/* Imagem detectada */}
       <Card className="overflow-hidden border-primary/20">
         <div className="p-3 md:p-4 bg-gradient-hero">
@@ -99,9 +100,9 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
         </div>
       </Card>
 
-      {/* Player de vídeo */}
+      {/* Player de vídeo - AUMENTADO */}
       <Card className="overflow-hidden bg-black border-primary/20 shadow-glow">
-        <div className="relative aspect-video">
+        <div className="relative w-full" style={{ aspectRatio: '16/10', minHeight: '400px' }}>
           <video
             className="w-full h-full object-cover"
             src={matchedEntry.videoUrl}
@@ -112,14 +113,13 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
             onPause={() => setIsPlaying(false)}
             onCanPlay={(e) => {
               const video = e.currentTarget;
-              video.muted = false;
               video.volume = 0.1;
               video.play().catch(console.error);
             }}
           />
           
           {/* Overlay de controles customizado */}
-          <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 flex items-center justify-between bg-black/50 backdrop-blur-sm rounded-lg p-2 md:p-3">
+          <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 right-2 md:right-4 flex items-center justify-between bg-black/60 backdrop-blur-sm rounded-lg p-2 md:p-3">
             <div className="flex items-center space-x-2 md:space-x-3">
               <Button
                 size="sm"
@@ -147,7 +147,7 @@ export const VideoPlayer = ({ detectedImage, onBack }: VideoPlayerProps) => {
       </Card>
 
       {/* Informações do vídeo */}
-      <Card className="p-6 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+      <Card className="p-4 md:p-6 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
         <h4 className="text-lg font-semibold mb-2">Como funciona a magia? 🪄</h4>
         <div className="space-y-2 text-sm text-muted-foreground">
           <p>• IA analisa características únicas da foto impressa</p>

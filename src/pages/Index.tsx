@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { CameraView } from '@/components/CameraView';
 import { VideoPlayer } from '@/components/VideoPlayer';
@@ -20,14 +21,14 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-bg">
       {/* Header */}
       <header className="border-b border-primary/20 bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-3 md:py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
-                <PlayCircle className="w-6 h-6 text-white" />
+              <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-primary flex items-center justify-center">
+                <PlayCircle className="w-4 h-4 md:w-6 md:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                <h1 className="text-lg md:text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
                   PhotoPlay AR
                 </h1>
                 <p className="text-xs text-muted-foreground">Foto + Vídeo = Magia</p>
@@ -40,10 +41,10 @@ const Index = () => {
                 size="sm"
                 className="border-primary/30 hover:bg-primary/10"
               >
-                <Settings className="w-4 h-4 mr-1" />
-                Admin
+                <Settings className="w-3 h-3 md:w-4 md:h-4 mr-1" />
+                <span className="hidden sm:inline">Admin</span>
               </Button>
-              <div className="text-right">
+              <div className="text-right hidden sm:block">
                 <p className="text-sm font-medium">Sistema Predefinido</p>
                 <p className="text-xs text-muted-foreground">v1.0.0</p>
               </div>
@@ -52,16 +53,16 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6 md:py-8">
         {!detectedImage ? (
           <div className="space-y-8">
             {/* Hero Section */}
-            <div className="text-center space-y-6 mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold">
+            <div className="text-center space-y-4 md:space-y-6 mb-8 md:mb-12">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold">
                 Transforme <span className="bg-gradient-hero bg-clip-text text-transparent">fotos</span> em{' '}
                 <span className="bg-gradient-hero bg-clip-text text-transparent">vídeos</span>
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
                 Aponte sua câmera para qualquer foto impressa e veja a mágica acontecer. 
                 Realidade aumentada na palma da sua mão.
               </p>
@@ -73,7 +74,7 @@ const Index = () => {
             </div>
 
             {/* Features */}
-            <div className="grid md:grid-cols-3 gap-6 mt-16">
+            <div className="grid md:grid-cols-3 gap-6 mt-12 md:mt-16">
               <Card className="p-6 text-center bg-gradient-to-b from-primary/5 to-transparent border-primary/20">
                 <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mx-auto mb-4">
                   <Eye className="w-6 h-6 text-primary" />
@@ -106,7 +107,7 @@ const Index = () => {
             </div>
           </div>
         ) : (
-          <div className="max-w-2xl mx-auto px-4">
+          <div className="max-w-4xl mx-auto px-2 md:px-4">
             <VideoPlayer detectedImage={detectedImage} onBack={handleBack} />
           </div>
         )}
